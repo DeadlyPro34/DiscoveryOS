@@ -109,8 +109,8 @@ export default function ProjectDetailsPage() {
   };
 
   return (
-    <div className="pb-20">
-      <div className="pt-28 px-[28px] pb-[16px] flex items-center gap-4 border-b-[3px] border-black mb-8 bg-[#fff]">
+    <div className="w-[95%] max-w-6xl mx-auto pb-20">
+      <div className="pt-28 pb-[16px] flex items-center gap-4 border-b-[3px] border-black mb-8 bg-transparent">
         <button 
           onClick={() => router.push('/projects')} 
           className="flex items-center justify-center h-[38px] px-3 bg-[#fff] border-[1.5px] border-[#d0d0d0] rounded-[8px] text-sm font-medium hover:bg-gray-50 transition-colors gap-2"
@@ -123,7 +123,7 @@ export default function ProjectDetailsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-[28px]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-12">
           <section>
             <h2 className="text-[22px] font-[700] text-[#111] mb-4">Upload Research Data</h2>

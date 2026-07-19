@@ -18,7 +18,7 @@ export default function ProjectsPage(): React.ReactElement {
   const { filters, setStatus, setSortBy, setQuery, setLayoutType } = useProjectFilters();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { projects, createProject } = useProjects({
+  const { projects, createProject, deleteProject } = useProjects({
     workspaceId: currentWorkspace?.id,
     status: filters.status,
     query: filters.query,
@@ -53,8 +53,8 @@ export default function ProjectsPage(): React.ReactElement {
   }
 
   return (
-    <div>
-      <div className="pt-28 px-[28px] pb-[16px]">
+    <div className="w-[95%] max-w-6xl mx-auto">
+      <div className="pt-28 pb-[16px]">
         <h1 className="text-[22px] font-[700] text-[#111] mb-1">Projects</h1>
         <p className="text-[13px] text-[#777]">
           Workspace: <span className="font-semibold">{currentWorkspace.name}</span>
@@ -79,11 +79,13 @@ export default function ProjectsPage(): React.ReactElement {
         <ProjectGrid
           projects={projects}
           onSelectProject={(project) => handleSelectProject(project.id)}
+          onDeleteProject={deleteProject}
         />
       ) : (
         <ProjectList
           projects={projects}
           onSelectProject={(project) => handleSelectProject(project.id)}
+          onDeleteProject={deleteProject}
         />
       )}
 
