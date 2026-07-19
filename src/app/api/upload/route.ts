@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { MultiAgentOrchestrator } from '@/services/ai/orchestrator/orchestrator';
 import { agentRegistry } from '@/services/ai/agents';
-// @ts-ignore
-const pdf = require('pdf-parse');
+import { prisma } from '@/lib/prisma';
+
 
 export async function POST(req: Request) {
   try {
@@ -26,18 +26,13 @@ export async function POST(req: Request) {
 
     // Handle PDF Parsing
     if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
-      let pdfFunc = pdf;
-      if (typeof pdfFunc !== 'function') {
-        pdfFunc = pdf.default || pdf.pdf || (Object.values(pdf).find(v => typeof v === 'function'));
-      }
-      
-      if (typeof pdfFunc !== 'function') {
-         console.error('Could not resolve pdf-parse function. pdf object keys:', Object.keys(pdf || {}));
-         throw new Error('PDF parsing library failed to load correctly');
-      }
-
-      const data = await pdfFunc(buffer);
+      const pdf = require('pdf-parse/lib/pdf-parse.js');
+      const data = await pdf(buffer);
       extractedText = data.text;
+    } else if (file.name.endsWith('.docx') || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+      const mammoth = require('mammoth');
+      const result = await mammoth.extractRawText({ buffer });
+      extractedText = result.value;
     } else {
       // Fallback for simple text files for testing
       extractedText = buffer.toString('utf-8');
@@ -67,6 +62,40 @@ export async function POST(req: Request) {
       }
     }, workflowId);
 
+    // Save to Postgres
+    const document = await prisma.document.create({
+      data: {
+        projectId,
+        name: file.name,
+        type: file.name.split('.').pop() || 'unknown',
+        size: file.size,
+        status: 'Completed',
+        uploadProgress: 100,
+      }
+    });
+
+    // Calculate how many insights the AI produced (e.g. pain points)
+    const insightAgentResult = resultContext.results.find((r: any) => r.agentId === 'insight-agent');
+    let newInsightsCount = 0;
+    if (insightAgentResult && insightAgentResult.output?.structured) {
+       // if it returns an array of pain points, use its length, otherwise 1
+       const structured = insightAgentResult.output.structured as any;
+       if (Array.isArray(structured)) newInsightsCount = structured.length;
+       else if (structured.painPoints && Array.isArray(structured.painPoints)) newInsightsCount = structured.painPoints.length;
+       else newInsightsCount = 1;
+    } else if (resultContext.results.length > 0) {
+       newInsightsCount = 1; // Fallback if some AI ran successfully
+    }
+
+    // Increment project upload count and insights count
+    await prisma.project.update({
+      where: { id: projectId },
+      data: { 
+        uploadCount: { increment: 1 },
+        insightsCount: { increment: newInsightsCount }
+      }
+    });
+
     return NextResponse.json({
       success: true,
       message: 'File processed and insights generated',
@@ -76,7 +105,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Error processing upload:', error);
     return NextResponse.json(
-      { error: 'Failed to process file' },
+      { error: 'Failed to process file', details: error instanceof Error ? error.message : String(error), stack: error instanceof Error ? error.stack : undefined },
       { status: 500 }
     );
   }
