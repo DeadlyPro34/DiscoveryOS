@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Brain, Zap, Target, BarChart3, MessageSquare } from 'lucide-react';
+import { AnimatedCharacter } from '@/components/ui/AnimatedCharacter';
 
 export default function LandingPage(): React.ReactElement {
   return (
@@ -30,32 +31,10 @@ export default function LandingPage(): React.ReactElement {
             </div>
           </div>
 
-          <div className="relative mt-12 lg:mt-0">
-            {/* Abstract visual representing AI PM */}
+          <div className="relative mt-12 lg:mt-0 overflow-hidden">
+            {/* Animated Character */}
             <div className="aspect-square bg-white border-[4px] border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-8 relative overflow-hidden">
-              <div className="absolute top-4 right-4 bg-accent border-[3px] border-black p-2 shadow-neo animate-bounce">
-                <Zap className="w-8 h-8 text-black" strokeWidth={3} />
-              </div>
-              <div className="absolute bottom-12 left-8 bg-secondary border-[3px] border-black p-3 shadow-neo rotate-6">
-                <MessageSquare className="w-10 h-10 text-black" strokeWidth={3} />
-              </div>
-              <div className="h-full w-full border-[3px] border-black bg-gray-50 flex flex-col pt-12">
-                <div className="flex-1 p-6 space-y-6 relative z-10">
-                  <div className="w-3/4 h-8 bg-gray-200 border-[2px] border-black"></div>
-                  <div className="w-1/2 h-8 bg-gray-200 border-[2px] border-black"></div>
-                  <div className="flex gap-4 mt-8">
-                    <div className="w-12 h-12 rounded-full bg-primary border-[3px] border-black flex-shrink-0 flex items-center justify-center">
-                      <Brain className="w-6 h-6 text-black" />
-                    </div>
-                    <div className="bg-white border-[3px] border-black p-4 shadow-neo flex-1">
-                      <div className="w-full h-4 bg-gray-200 border-[2px] border-black mb-3"></div>
-                      <div className="w-5/6 h-4 bg-gray-200 border-[2px] border-black"></div>
-                    </div>
-                  </div>
-                </div>
-                {/* Decorative background grid */}
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
-              </div>
+              <AnimatedCharacter variant="excited" color="#4DD9AC" />
             </div>
           </div>
         </div>
