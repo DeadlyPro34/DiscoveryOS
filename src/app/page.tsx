@@ -4,22 +4,7 @@ import { ArrowRight, Brain, Zap, Target, BarChart3, MessageSquare } from 'lucide
 
 export default function LandingPage(): React.ReactElement {
   return (
-    <div className="min-h-screen bg-background font-sans selection:bg-accent selection:text-black pb-20">
-      {/* Navigation */}
-      <nav className="border-b-[3px] border-black bg-white px-6 py-4 flex items-center justify-between sticky top-0 z-50">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary border-[3px] border-black p-1.5 shadow-neo">
-            <Target className="w-6 h-6 text-black" strokeWidth={3} />
-          </div>
-          <span className="text-2xl font-black tracking-tight text-black">DiscoveryOS</span>
-        </div>
-        <Link href="/login">
-          <button className="bg-accent hover:bg-[#ffe600] text-black border-[3px] border-black px-6 py-2.5 font-bold shadow-neo transition-transform hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none">
-            Try Demo
-          </button>
-        </Link>
-      </nav>
-
+    <div className="min-h-screen bg-[#c8f0e0] font-sans selection:bg-accent selection:text-black">
       {/* Hero Section */}
       <main className="max-w-6xl mx-auto px-6 pt-20 pb-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

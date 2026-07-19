@@ -44,6 +44,12 @@ export default function RootLayout({ children }: RootLayoutProps): ReactNode {
                 >
                   🤖 AI Workspace
                 </Link>
+                <Link
+                  href="/login"
+                  className="ml-2 px-4 py-2 text-sm font-bold bg-[#FFE066] text-black border-[2px] border-black rounded-lg shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-transform"
+                >
+                  Try Demo
+                </Link>
               </div>
             </div>
           </nav>
