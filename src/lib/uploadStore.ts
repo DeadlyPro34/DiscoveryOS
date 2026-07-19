@@ -23,7 +23,7 @@ interface UploadStore {
 }
 
 export const useUploadStore = create<UploadStore>((set, get) => ({
-  documents: MOCK_DOCUMENTS,
+  documents: [],
 
   addDocument: (document) =>
     set((state) => ({

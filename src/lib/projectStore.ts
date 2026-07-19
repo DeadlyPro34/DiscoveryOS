@@ -15,7 +15,7 @@ interface ProjectStore {
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
-  projects: MOCK_PROJECTS,
+  projects: [],
   currentProject: null,
 
   createProject: (project) =>
