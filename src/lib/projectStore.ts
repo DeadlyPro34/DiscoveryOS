@@ -12,11 +12,14 @@ interface ProjectStore {
   deleteProject: (id: string) => void;
   setCurrentProject: (id: string) => void;
   getProjectsByWorkspace: (workspaceId: string) => Project[];
+  setProjects: (projects: Project[]) => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set, get) => ({
   projects: [],
   currentProject: null,
+  
+  setProjects: (projects) => set({ projects }),
 
   createProject: (project) =>
     set((state) => ({

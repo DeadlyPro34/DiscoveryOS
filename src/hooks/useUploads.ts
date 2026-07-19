@@ -1,17 +1,28 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useUploadStore } from '@/lib/uploadStore';
 
 export function useUploads(projectId?: string) {
   const store = useUploadStore();
+  const [dbDocuments, setDbDocuments] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (projectId) {
+      fetch(`/api/uploads?projectId=${projectId}`)
+        .then(res => res.json())
+        .then(data => setDbDocuments(data))
+        .catch(console.error);
+    }
+  }, [projectId]);
 
   const documents = useMemo(() => {
-    if (!projectId) {
-      return store.documents;
-    }
-    return store.getProjectDocuments(projectId);
-  }, [store.documents, projectId, store]);
+    // Merge DB documents with in-progress uploads from store
+    const storeDocs = projectId ? store.getProjectDocuments(projectId) : store.documents;
+    const allDocs = [...storeDocs, ...dbDocuments];
+    // Deduplicate by ID
+    return Array.from(new Map(allDocs.map(item => [item.id, item])).values());
+  }, [store.documents, dbDocuments, projectId, store]);
 
   const statistics = useMemo(() => {
     return {
