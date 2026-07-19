@@ -308,7 +308,7 @@ export interface NodeStatistics {
   upstreamNodes: number;
   confidence: number;
   evidenceCount: number;
-  lastUpdated: Date;
+  updatedAt: Date;
 }
 
 /**

@@ -97,7 +97,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
         </div>
 
         <div className="text-xs text-gray-500 dark:text-gray-500">
-          Updated {formatRelativeTime(project.lastUpdated)}
+          Updated {formatRelativeTime(project.updatedAt)}
         </div>
       </CardContent>
     </Card>

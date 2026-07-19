@@ -18,7 +18,7 @@ export function sortProjects(
     case 'name':
       return sorted.sort((a, b) => a.name.localeCompare(b.name));
     case 'date':
-      return sorted.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+      return sorted.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime());
     case 'insights':
       return sorted.sort((a, b) => b.insightsCount - a.insightsCount);
     case 'uploads':

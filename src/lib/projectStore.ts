@@ -7,7 +7,7 @@ import { MOCK_PROJECTS } from './mock-data/projects';
 interface ProjectStore {
   projects: Project[];
   currentProject: Project | null;
-  createProject: (project: Omit<Project, 'id' | 'lastUpdated'>) => void;
+  createProject: (project: Omit<Project, 'id' | 'updatedAt'>) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
   deleteProject: (id: string) => void;
   setCurrentProject: (id: string) => void;
@@ -28,7 +28,7 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
         {
           ...project,
           id: `proj-${Date.now()}`,
-          lastUpdated: new Date(),
+          updatedAt: new Date(),
         },
       ],
     })),
@@ -36,11 +36,11 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
   updateProject: (id, updates) =>
     set((state) => ({
       projects: state.projects.map((proj) =>
-        proj.id === id ? { ...proj, ...updates, lastUpdated: new Date() } : proj
+        proj.id === id ? { ...proj, ...updates, updatedAt: new Date() } : proj
       ),
       currentProject:
         state.currentProject?.id === id
-          ? { ...state.currentProject, ...updates, lastUpdated: new Date() }
+          ? { ...state.currentProject, ...updates, updatedAt: new Date() }
           : state.currentProject,
     })),
 

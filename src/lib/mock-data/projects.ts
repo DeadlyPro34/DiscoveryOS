@@ -9,7 +9,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 34,
     insightsCount: 127,
-    lastUpdated: new Date('2024-05-15'),
+    updatedAt: new Date('2024-05-15'),
     workspaceId: 'ws-001',
   },
   {
@@ -19,7 +19,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 28,
     insightsCount: 94,
-    lastUpdated: new Date('2024-05-12'),
+    updatedAt: new Date('2024-05-12'),
     workspaceId: 'ws-001',
   },
   {
@@ -29,7 +29,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 45,
     insightsCount: 32,
-    lastUpdated: new Date('2024-05-18'),
+    updatedAt: new Date('2024-05-18'),
     workspaceId: 'ws-001',
   },
   {
@@ -39,7 +39,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 12,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-001',
   },
   {
@@ -49,7 +49,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 67,
     insightsCount: 156,
-    lastUpdated: new Date('2024-05-10'),
+    updatedAt: new Date('2024-05-10'),
     workspaceId: 'ws-001',
   },
   {
@@ -59,7 +59,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 23,
     insightsCount: 48,
-    lastUpdated: new Date('2024-05-17'),
+    updatedAt: new Date('2024-05-17'),
     workspaceId: 'ws-001',
   },
   {
@@ -69,7 +69,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Archived',
     uploadCount: 18,
     insightsCount: 52,
-    lastUpdated: new Date('2024-04-30'),
+    updatedAt: new Date('2024-04-30'),
     workspaceId: 'ws-001',
   },
   {
@@ -79,7 +79,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 31,
     insightsCount: 78,
-    lastUpdated: new Date('2024-05-14'),
+    updatedAt: new Date('2024-05-14'),
     workspaceId: 'ws-001',
   },
 
@@ -91,7 +91,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 82,
     insightsCount: 201,
-    lastUpdated: new Date('2024-05-19'),
+    updatedAt: new Date('2024-05-19'),
     workspaceId: 'ws-002',
   },
   {
@@ -101,7 +101,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 56,
     insightsCount: 134,
-    lastUpdated: new Date('2024-05-16'),
+    updatedAt: new Date('2024-05-16'),
     workspaceId: 'ws-002',
   },
   {
@@ -111,7 +111,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 24,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-002',
   },
   {
@@ -121,7 +121,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 38,
     insightsCount: 97,
-    lastUpdated: new Date('2024-05-13'),
+    updatedAt: new Date('2024-05-13'),
     workspaceId: 'ws-002',
   },
   {
@@ -131,7 +131,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 71,
     insightsCount: 89,
-    lastUpdated: new Date('2024-05-18'),
+    updatedAt: new Date('2024-05-18'),
     workspaceId: 'ws-002',
   },
   {
@@ -141,7 +141,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 42,
     insightsCount: 112,
-    lastUpdated: new Date('2024-05-11'),
+    updatedAt: new Date('2024-05-11'),
     workspaceId: 'ws-002',
   },
   {
@@ -151,7 +151,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 29,
     insightsCount: 64,
-    lastUpdated: new Date('2024-05-19'),
+    updatedAt: new Date('2024-05-19'),
     workspaceId: 'ws-002',
   },
   {
@@ -161,7 +161,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 48,
     insightsCount: 143,
-    lastUpdated: new Date('2024-05-14'),
+    updatedAt: new Date('2024-05-14'),
     workspaceId: 'ws-002',
   },
   {
@@ -171,7 +171,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 93,
     insightsCount: 267,
-    lastUpdated: new Date('2024-05-15'),
+    updatedAt: new Date('2024-05-15'),
     workspaceId: 'ws-002',
   },
   {
@@ -181,7 +181,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 55,
     insightsCount: 76,
-    lastUpdated: new Date('2024-05-17'),
+    updatedAt: new Date('2024-05-17'),
     workspaceId: 'ws-002',
   },
   {
@@ -191,7 +191,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 67,
     insightsCount: 189,
-    lastUpdated: new Date('2024-05-12'),
+    updatedAt: new Date('2024-05-12'),
     workspaceId: 'ws-002',
   },
   {
@@ -201,7 +201,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 15,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-002',
   },
 
@@ -213,7 +213,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 38,
     insightsCount: 102,
-    lastUpdated: new Date('2024-05-18'),
+    updatedAt: new Date('2024-05-18'),
     workspaceId: 'ws-003',
   },
   {
@@ -223,7 +223,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 44,
     insightsCount: 118,
-    lastUpdated: new Date('2024-05-15'),
+    updatedAt: new Date('2024-05-15'),
     workspaceId: 'ws-003',
   },
   {
@@ -233,7 +233,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 19,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-003',
   },
   {
@@ -243,7 +243,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 28,
     insightsCount: 65,
-    lastUpdated: new Date('2024-05-19'),
+    updatedAt: new Date('2024-05-19'),
     workspaceId: 'ws-003',
   },
   {
@@ -253,7 +253,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 22,
     insightsCount: 76,
-    lastUpdated: new Date('2024-05-16'),
+    updatedAt: new Date('2024-05-16'),
     workspaceId: 'ws-003',
   },
 
@@ -265,7 +265,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 234,
     insightsCount: 456,
-    lastUpdated: new Date('2024-05-19'),
+    updatedAt: new Date('2024-05-19'),
     workspaceId: 'ws-004',
   },
   {
@@ -275,7 +275,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 78,
     insightsCount: 234,
-    lastUpdated: new Date('2024-05-17'),
+    updatedAt: new Date('2024-05-17'),
     workspaceId: 'ws-004',
   },
   {
@@ -285,7 +285,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 45,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-004',
   },
   {
@@ -295,7 +295,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 156,
     insightsCount: 203,
-    lastUpdated: new Date('2024-05-18'),
+    updatedAt: new Date('2024-05-18'),
     workspaceId: 'ws-004',
   },
   {
@@ -305,7 +305,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 89,
     insightsCount: 267,
-    lastUpdated: new Date('2024-05-14'),
+    updatedAt: new Date('2024-05-14'),
     workspaceId: 'ws-004',
   },
   {
@@ -315,7 +315,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 67,
     insightsCount: 145,
-    lastUpdated: new Date('2024-05-16'),
+    updatedAt: new Date('2024-05-16'),
     workspaceId: 'ws-004',
   },
   {
@@ -325,7 +325,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 123,
     insightsCount: 178,
-    lastUpdated: new Date('2024-05-19'),
+    updatedAt: new Date('2024-05-19'),
     workspaceId: 'ws-004',
   },
   {
@@ -335,7 +335,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 102,
     insightsCount: 234,
-    lastUpdated: new Date('2024-05-13'),
+    updatedAt: new Date('2024-05-13'),
     workspaceId: 'ws-004',
   },
   {
@@ -345,7 +345,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 38,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-004',
   },
   {
@@ -355,7 +355,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 145,
     insightsCount: 312,
-    lastUpdated: new Date('2024-05-15'),
+    updatedAt: new Date('2024-05-15'),
     workspaceId: 'ws-004',
   },
   {
@@ -365,7 +365,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 67,
     insightsCount: 123,
-    lastUpdated: new Date('2024-05-18'),
+    updatedAt: new Date('2024-05-18'),
     workspaceId: 'ws-004',
   },
   {
@@ -375,7 +375,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 98,
     insightsCount: 189,
-    lastUpdated: new Date('2024-05-16'),
+    updatedAt: new Date('2024-05-16'),
     workspaceId: 'ws-004',
   },
   {
@@ -385,7 +385,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 52,
     insightsCount: 87,
-    lastUpdated: new Date('2024-05-19'),
+    updatedAt: new Date('2024-05-19'),
     workspaceId: 'ws-004',
   },
   {
@@ -395,7 +395,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 23,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-004',
   },
   {
@@ -405,7 +405,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 134,
     insightsCount: 298,
-    lastUpdated: new Date('2024-05-14'),
+    updatedAt: new Date('2024-05-14'),
     workspaceId: 'ws-004',
   },
 
@@ -417,7 +417,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 41,
     insightsCount: 98,
-    lastUpdated: new Date('2024-05-15'),
+    updatedAt: new Date('2024-05-15'),
     workspaceId: 'ws-005',
   },
   {
@@ -427,7 +427,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 38,
     insightsCount: 67,
-    lastUpdated: new Date('2024-05-18'),
+    updatedAt: new Date('2024-05-18'),
     workspaceId: 'ws-005',
   },
   {
@@ -437,7 +437,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 29,
     insightsCount: 76,
-    lastUpdated: new Date('2024-05-16'),
+    updatedAt: new Date('2024-05-16'),
     workspaceId: 'ws-005',
   },
   {
@@ -447,7 +447,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Processing',
     uploadCount: 33,
     insightsCount: 54,
-    lastUpdated: new Date('2024-05-19'),
+    updatedAt: new Date('2024-05-19'),
     workspaceId: 'ws-005',
   },
   {
@@ -457,7 +457,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Research',
     uploadCount: 18,
     insightsCount: 0,
-    lastUpdated: new Date('2024-05-20'),
+    updatedAt: new Date('2024-05-20'),
     workspaceId: 'ws-005',
   },
   {
@@ -467,7 +467,7 @@ export const MOCK_PROJECTS: Project[] = [
     status: 'Completed',
     uploadCount: 44,
     insightsCount: 112,
-    lastUpdated: new Date('2024-05-13'),
+    updatedAt: new Date('2024-05-13'),
     workspaceId: 'ws-005',
   },
 ];

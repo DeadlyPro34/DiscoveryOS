@@ -63,7 +63,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
               <span>{project.insightsCount}</span>
             </div>
             <div className="text-xs text-gray-500 w-20 text-right">
-              {formatRelativeTime(project.lastUpdated)}
+              {formatRelativeTime(project.updatedAt)}
             </div>
           </div>
 
