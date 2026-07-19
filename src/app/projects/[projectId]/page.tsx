@@ -41,10 +41,11 @@ export default function ProjectDetailsPage() {
         id: uploadId,
         projectId,
         name: file.name,
-        type: 'PDF',
+        type: 'pdf',
         size: file.size,
         status: 'Uploading',
         uploadProgress: 0,
+        createdDate: new Date(),
         uploadedAt: new Date()
       });
 
