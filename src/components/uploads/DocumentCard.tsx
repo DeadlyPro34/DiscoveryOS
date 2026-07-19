@@ -79,7 +79,7 @@ export function DocumentCard({
                     <>
                       {' '}
                       •{' '}
-                      {document.uploadedAt.toLocaleDateString('en-US', {
+                      {new Date(document.uploadedAt).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
                         year: '2-digit',
