@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useChat } from '@/hooks/useChat';
 import { useConversations } from '@/hooks/useConversations';
+import { useProjects } from '@/hooks/useProjects';
 import { ProjectsSidebar } from '@/components/ai-workspace/ProjectsSidebar';
 import { ConversationArea } from '@/components/ai-workspace/ConversationArea';
 import { EvidencePanel } from '@/components/ai-workspace/EvidencePanel';
@@ -15,6 +16,7 @@ export default function AIWorkspacePage() {
     currentEvidence,
     sendMessage,
     clearMessages,
+    restoreMessages,
   } = useChat();
 
   const {
@@ -27,6 +29,8 @@ export default function AIWorkspacePage() {
     updateCurrentConversationMessages,
   } = useConversations();
 
+  const { projects } = useProjects();
+
   // Auto-create a conversation when first message is sent
   useEffect(() => {
     if (messages.length > 0 && !currentConversation) {
@@ -36,7 +40,7 @@ export default function AIWorkspacePage() {
 
   // Update conversation when messages change
   useEffect(() => {
-    if (messages.length > 0 && currentConversation) {
+    if (messages.length > 0 && currentConversation && messages !== currentConversation.messages) {
       updateCurrentConversationMessages(messages);
     }
   }, [messages, currentConversation, updateCurrentConversationMessages]);
@@ -47,36 +51,18 @@ export default function AIWorkspacePage() {
   };
 
   const handleLoadConversation = (id: string) => {
-    clearMessages();
-    loadConversation(id);
+    const conv = conversations.find(c => c.id === id);
+    if (conv) {
+      restoreMessages(conv.messages);
+      loadConversation(id);
+    }
   };
 
-  const projects: AIWorkspaceProject[] = [
-    {
-      id: '1',
-      name: 'Q3 Product Roadmap',
-      description: 'Planning features for Q3',
-      uploadCount: 5,
-      evidenceCount: 152,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: '2',
-      name: 'User Onboarding Research',
-      description: 'Improving first-time user experience',
-      uploadCount: 3,
-      evidenceCount: 89,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-  ];
-
   return (
-    <div className="flex h-screen bg-[#F4F4F0] overflow-hidden">
+    <div className="flex h-screen bg-[#f0faf5] overflow-hidden">
       {/* Left Sidebar (Desktop Only) */}
-      <div className="hidden md:flex flex-col w-80 border-r-[3px] border-black bg-white">
-        <div className="flex-1 overflow-y-auto">
+      <div className="hidden md:flex flex-col w-80 border-r-[3px] border-black bg-transparent pt-28">
+        <div className="flex-1 overflow-y-auto" data-lenis-prevent>
           <ProjectsSidebar
             projects={projects}
             conversations={conversations}
@@ -90,7 +76,7 @@ export default function AIWorkspacePage() {
       </div>
 
       {/* Center Chat Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 pt-28">
         <ConversationArea
           messages={messages}
           onSendMessage={sendMessage}
@@ -99,7 +85,7 @@ export default function AIWorkspacePage() {
       </div>
 
       {/* Right Evidence Panel (Desktop Only) */}
-      <div className="hidden lg:block w-96 border-l-[3px] border-black bg-white overflow-y-auto">
+      <div className="hidden lg:block w-96 border-l-[3px] border-black bg-transparent overflow-y-auto pt-28" data-lenis-prevent>
         {currentEvidence ? (
           <EvidencePanel
             evidence={currentEvidence}
@@ -107,9 +93,9 @@ export default function AIWorkspacePage() {
           />
         ) : (
           <div className="h-full flex items-center justify-center p-6 text-center">
-            <div className="bg-[#FFE066] p-6 rounded-xl border-[3px] border-black shadow-neo">
-              <h3 className="font-black text-xl mb-2">📊 Evidence Panel</h3>
-              <p className="font-medium text-sm">
+            <div className="bg-[#fff] p-6 rounded-[14px] border-[1.5px] border-[#e5e5e5]">
+              <h3 className="font-[700] text-xl mb-2 text-[#111]">📊 Evidence Panel</h3>
+              <p className="font-medium text-sm text-[#777]">
                 Ask a question to see supporting customer quotes, sentiment analysis, and related themes here.
               </p>
             </div>

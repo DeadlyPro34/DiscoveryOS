@@ -19,6 +19,12 @@ export function useChat(projectId?: string) {
     setError(null);
   }, []);
 
+  const restoreMessages = useCallback((restoredMessages: Message[]) => {
+    setMessages(restoredMessages);
+    setCurrentEvidence(null);
+    setError(null);
+  }, []);
+
   const sendMessage = useCallback(async (content: string) => {
     setError(null);
 
@@ -158,5 +164,6 @@ export function useChat(projectId?: string) {
     error,
     sendMessage,
     clearMessages,
+    restoreMessages,
   };
 }

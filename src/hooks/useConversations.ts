@@ -81,23 +81,26 @@ export function useConversations() {
   }, [conversations]);
 
   const updateCurrentConversationMessages = useCallback((messages: Message[]) => {
-    if (!currentConversation) return;
-    
-    const updatedConv = {
-      ...currentConversation,
-      messages,
-      updatedAt: new Date(),
-      // Auto-generate title for new conversations
-      title: currentConversation.title === 'New Conversation' && messages.length > 0 
-        ? messages[0].content.substring(0, 30) + '...'
-        : currentConversation.title
-    };
-    
-    setCurrentConversation(updatedConv);
-    setConversations(prev => prev.map(c => 
-      c.id === currentConversation.id ? updatedConv : c
-    ));
-  }, [currentConversation]);
+    setCurrentConversation(prev => {
+      if (!prev) return prev;
+      
+      const updatedConv = {
+        ...prev,
+        messages,
+        updatedAt: new Date(),
+        // Auto-generate title for new conversations
+        title: prev.title === 'New Conversation' && messages.length > 0 
+          ? messages[0].content.substring(0, 30) + '...'
+          : prev.title
+      };
+      
+      setConversations(convs => convs.map(c => 
+        c.id === prev.id ? updatedConv : c
+      ));
+      
+      return updatedConv;
+    });
+  }, []);
 
   const searchConversations = useCallback((query: string) => {
     if (!query.trim()) return conversations;
