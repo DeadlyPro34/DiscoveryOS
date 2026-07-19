@@ -2,16 +2,26 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/authStore';
 import { LogOut } from 'lucide-react';
 
 export default function Navbar() {
   const { isAuthenticated, userName, logout } = useAuthStore();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const getLinkClasses = (path: string, exact = false) => {
+    const isActive = exact ? pathname === path : pathname.startsWith(path);
+    if (isActive) {
+      return "px-3 py-1.5 text-sm font-bold rounded-lg bg-[#38DBFF] border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-transform";
+    }
+    return "px-3 py-1.5 text-sm font-bold rounded-lg hover:bg-[#FFE066] transition-colors";
+  };
 
   return (
     <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl border-[3px] border-black bg-white z-50 rounded-xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -24,19 +34,19 @@ export default function Navbar() {
         <div className="flex items-center gap-1">
           <Link
             href="/"
-            className="px-3 py-1.5 text-sm font-bold rounded-lg hover:bg-[#FFE066] transition-colors"
+            className={getLinkClasses('/', true)}
           >
             Dashboard
           </Link>
           <Link
             href="/projects"
-            className="px-3 py-1.5 text-sm font-bold rounded-lg hover:bg-[#FFE066] transition-colors"
+            className={getLinkClasses('/projects')}
           >
             Projects
           </Link>
           <Link
             href="/ai-workspace"
-            className="px-3 py-1.5 text-sm font-bold rounded-lg bg-[#38DBFF] border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-transform"
+            className={getLinkClasses('/ai-workspace')}
           >
             🤖 AI Workspace
           </Link>
