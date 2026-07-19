@@ -805,6 +805,80 @@ export class SupabaseService {
   }
 
   /**
+   * V2 PERSISTENCE OPERATIONS (Insights, Themes, Personas, Artifacts)
+   */
+
+  async saveTheme(theme: any): Promise<DatabaseOperationResult<any>> {
+    try {
+      const { data, error } = await this.executeWithRetry(
+        () => this.getClient().from('themes').insert([theme]).select().single(),
+        'saveTheme'
+      );
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      logger.error('Failed to save theme', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
+  async savePersona(persona: any): Promise<DatabaseOperationResult<any>> {
+    try {
+      const { data, error } = await this.executeWithRetry(
+        () => this.getClient().from('personas').insert([persona]).select().single(),
+        'savePersona'
+      );
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      logger.error('Failed to save persona', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
+  async saveInsight(insight: any): Promise<DatabaseOperationResult<any>> {
+    try {
+      const { data, error } = await this.executeWithRetry(
+        () => this.getClient().from('insights').insert([insight]).select().single(),
+        'saveInsight'
+      );
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      logger.error('Failed to save insight', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
+  async saveEvidence(evidence: any): Promise<DatabaseOperationResult<any>> {
+    try {
+      const { data, error } = await this.executeWithRetry(
+        () => this.getClient().from('evidence').insert([evidence]).select().single(),
+        'saveEvidence'
+      );
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      logger.error('Failed to save evidence', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
+  async saveArtifact(artifact: any): Promise<DatabaseOperationResult<any>> {
+    try {
+      const { data, error } = await this.executeWithRetry(
+        () => this.getClient().from('artifacts').insert([artifact]).select().single(),
+        'saveArtifact'
+      );
+      if (error) throw error;
+      return { success: true, data };
+    } catch (error) {
+      logger.error('Failed to save artifact', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
+
+  /**
    * HEALTH CHECK
    */
 

@@ -377,3 +377,99 @@ SELECT * FROM projects WHERE deleted_at IS NULL;
 
 CREATE OR REPLACE VIEW active_workspaces AS
 SELECT * FROM workspaces WHERE deleted_at IS NULL;
+
+-- ============================================================================
+-- PERSISTENCE ARCHITECTURE (V2)
+-- ============================================================================
+
+-- Themes table
+CREATE TABLE IF NOT EXISTS themes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  description TEXT,
+  frequency INTEGER DEFAULT 1,
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Personas table
+CREATE TABLE IF NOT EXISTS personas (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  role VARCHAR(255) NOT NULL,
+  description TEXT,
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Insights table (Pain points, feature requests, bugs)
+CREATE TABLE IF NOT EXISTS insights (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  type VARCHAR(50) NOT NULL CHECK (type IN ('pain_point', 'feature_request', 'bug', 'compliment', 'question')),
+  title VARCHAR(500) NOT NULL,
+  description TEXT,
+  frequency INTEGER DEFAULT 1,
+  confidence_score NUMERIC(3,2) DEFAULT 1.0,
+  revenue_impact VARCHAR(50) CHECK (revenue_impact IN ('High', 'Medium', 'Low', 'Unknown')),
+  user_frustration VARCHAR(50) CHECK (user_frustration IN ('High', 'Medium', 'Low', 'Unknown')),
+  theme_id UUID REFERENCES themes(id) ON DELETE SET NULL,
+  persona_id UUID REFERENCES personas(id) ON DELETE SET NULL,
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Sentiments table
+CREATE TABLE IF NOT EXISTS sentiments (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  insight_id UUID REFERENCES insights(id) ON DELETE CASCADE,
+  sentiment VARCHAR(50) NOT NULL CHECK (sentiment IN ('Positive', 'Neutral', 'Negative', 'Mixed')),
+  score NUMERIC(3,2),
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Evidence table (Join table linking insights to original source chunks)
+CREATE TABLE IF NOT EXISTS evidence (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  insight_id UUID NOT NULL REFERENCES insights(id) ON DELETE CASCADE,
+  chunk_id UUID NOT NULL REFERENCES chunks(id) ON DELETE CASCADE,
+  project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  exact_quote TEXT,
+  relevance_score NUMERIC(3,2) DEFAULT 1.0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Artifacts table (PRDs, Roadmaps, Reports)
+CREATE TABLE IF NOT EXISTS artifacts (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  project_id UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+  workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  type VARCHAR(50) NOT NULL CHECK (type IN ('prd', 'roadmap', 'report', 'executive_summary')),
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  status VARCHAR(50) DEFAULT 'draft' CHECK (status IN ('draft', 'review', 'approved', 'archived')),
+  created_by UUID, -- Can be null if AI generated
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Indexes for V2
+CREATE INDEX idx_themes_project_id ON themes(project_id);
+CREATE INDEX idx_personas_project_id ON personas(project_id);
+CREATE INDEX idx_insights_project_id ON insights(project_id);
+CREATE INDEX idx_insights_type ON insights(type);
+CREATE INDEX idx_evidence_insight_id ON evidence(insight_id);
+CREATE INDEX idx_evidence_chunk_id ON evidence(chunk_id);
+CREATE INDEX idx_artifacts_project_id ON artifacts(project_id);
+
