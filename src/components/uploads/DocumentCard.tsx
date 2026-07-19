@@ -120,17 +120,6 @@ export function DocumentCard({
         </div>
 
         <div className="flex items-center gap-1 flex-shrink-0">
-          {document.status === 'Failed' && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => onRetry(document.id)}
-              title="Retry upload"
-            >
-              <RotateCcw className="h-4 w-4" />
-            </Button>
-          )}
-
           {document.status === 'Completed' && onView && (
             <Button
               variant="ghost"
@@ -139,16 +128,6 @@ export function DocumentCard({
               title="View document"
             >
               <Eye className="h-4 w-4" />
-            </Button>
-          )}
-
-          {document.status === 'Completed' && (
-            <Button
-              variant="ghost"
-              size="sm"
-              title="Download document"
-            >
-              <Download className="h-4 w-4" />
             </Button>
           )}
 
