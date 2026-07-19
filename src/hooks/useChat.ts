@@ -1,15 +1,17 @@
 import { useState, useCallback } from 'react';
 import type { Message, EvidencePanelData } from '@/types/ai-workspace';
+import { useAIContextStore } from '@/lib/aiContextStore';
 
 /**
  * Hook for managing real-time streaming chat with the /api/chat endpoint.
  * Parses evidence data from <!--EVIDENCE_START--> / <!--EVIDENCE_END--> delimiters.
  */
-export function useChat() {
+export function useChat(projectId?: string) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [currentEvidence, setCurrentEvidence] = useState<EvidencePanelData | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { contextChunks } = useAIContextStore();
 
   const clearMessages = useCallback(() => {
     setMessages([]);
@@ -50,12 +52,19 @@ export function useChat() {
         content: m.content,
       }));
 
+      // Only send context chunks that match this project (or all if none selected)
+      const relevantChunks = projectId 
+        ? contextChunks.filter(c => c.metadata.projectId === projectId)
+        : contextChunks;
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: content,
           conversationHistory,
+          projectId,
+          localContext: relevantChunks,
         }),
       });
 

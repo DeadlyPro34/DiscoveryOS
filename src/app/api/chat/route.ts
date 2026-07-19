@@ -14,10 +14,11 @@ export const runtime = 'nodejs';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { message, conversationHistory = [], projectId } = body as {
+    const { message, conversationHistory = [], projectId, localContext = [] } = body as {
       message: string;
       conversationHistory: ChatMessage[];
       projectId?: string;
+      localContext?: Array<{ id: string; content: string; metadata: Record<string, unknown>; similarity: number }>;
     };
 
     if (!message) {
@@ -55,6 +56,12 @@ export async function POST(req: NextRequest) {
       } catch (ragError) {
         console.warn('RAG retrieval failed, proceeding without context:', ragError);
       }
+    }
+
+    // Fallback to in-memory context from the frontend if RAG is unavailable or returned no chunks
+    if (chunks.length === 0 && localContext.length > 0) {
+      console.log(`Using ${localContext.length} in-memory context chunks from frontend`);
+      chunks = localContext.slice(-5); // Use the 5 most recent agent insight chunks
     }
 
     // Build context
