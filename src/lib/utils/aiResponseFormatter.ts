@@ -57,9 +57,14 @@ export function formatFrequency(frequency: string): string {
 /**
  * Format date in readable format
  */
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | string | undefined | null): string {
+  if (!date) return 'Unknown date';
+  
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(dateObj.getTime())) return 'Unknown date';
+  
   const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
+  const diffMs = now.getTime() - dateObj.getTime();
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
   if (diffDays === 0) return 'Today';

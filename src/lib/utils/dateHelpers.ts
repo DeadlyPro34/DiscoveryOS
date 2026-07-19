@@ -1,5 +1,8 @@
-export function formatDate(date: Date | string): string {
+export function formatDate(date: Date | string | undefined | null): string {
+  if (!date) return 'Unknown date';
   const d = typeof date === 'string' ? new Date(date) : date;
+  if (!d || isNaN(d.getTime())) return 'Unknown date';
+  
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
@@ -7,8 +10,12 @@ export function formatDate(date: Date | string): string {
   }).format(d);
 }
 
-export function formatRelativeTime(date: Date | string): string {
+export function formatRelativeTime(date: Date | string | undefined | null): string {
+  if (!date) return 'Unknown';
+
   const d = typeof date === 'string' ? new Date(date) : date;
+  if (!d || isNaN(d.getTime())) return 'Unknown';
+
   const now = new Date();
   const seconds = Math.floor((now.getTime() - d.getTime()) / 1000);
 

@@ -37,7 +37,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
 }) => {
   return (
     <Card
-      className="cursor-pointer transition-all hover:shadow-md h-full"
+      className="cursor-pointer transition-all h-full border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px]"
       onClick={() => onSelect?.(project)}
     >
       <CardContent className="p-4">
