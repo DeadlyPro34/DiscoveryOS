@@ -60,7 +60,7 @@ export function DocumentCard({
   const isAnimating = document.status === 'Processing' || document.status === 'Uploading';
 
   return (
-    <Card className="p-4 hover:shadow-md transition-shadow">
+    <div className="p-4 bg-white border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] transition-all">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3 flex-1 min-w-0">
           <div className="flex-shrink-0 mt-1">
@@ -142,6 +142,6 @@ export function DocumentCard({
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

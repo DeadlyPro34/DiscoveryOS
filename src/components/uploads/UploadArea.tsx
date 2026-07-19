@@ -99,7 +99,7 @@ export function UploadArea({
   }, []);
 
   return (
-    <Card className="border-2 border-dashed border-gray-300 dark:border-gray-600">
+    <div className="border-[3px] border-black rounded-xl bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
       <div
         className={`p-8 text-center transition-colors ${
           isDragging
@@ -138,16 +138,16 @@ export function UploadArea({
             id={`file-input-${projectId}`}
           />
 
-          <Button
+          <button
             type="button"
-            variant="outline"
             onClick={() =>
               document.getElementById(`file-input-${projectId}`)?.click()
             }
             disabled={disabled}
+            className="flex items-center justify-center h-[38px] bg-[#FFE066] hover:-translate-y-0.5 text-black border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] rounded-xl px-4 text-sm font-black transition-all"
           >
             Select Files
-          </Button>
+          </button>
         </div>
 
         {selectedFiles.length > 0 && (
@@ -176,13 +176,13 @@ export function UploadArea({
             <Button
               onClick={handleUpload}
               disabled={disabled || selectedFiles.length === 0}
-              className="w-full"
+              className="w-full bg-[#4DD9AC] text-black border-[3px] border-black rounded-xl font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
             >
               Upload {selectedFiles.length} File{selectedFiles.length !== 1 ? 's' : ''}
             </Button>
           </div>
         )}
       </div>
-    </Card>
+    </div>
   );
 }

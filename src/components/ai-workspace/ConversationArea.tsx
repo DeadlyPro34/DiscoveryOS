@@ -53,16 +53,16 @@ export function ConversationArea({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F4F4F0] border-x-[3px] border-black">
+    <div className="flex flex-col h-full bg-[#f0faf5]">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6" data-lenis-prevent>
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-center">
-            <div className="bg-white p-8 rounded-xl border-[3px] border-black shadow-neo max-w-md">
-              <h2 className="text-2xl font-black text-black mb-4">
+            <div className="bg-white p-8 rounded-xl border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md w-full mx-4">
+              <h2 className="text-[22px] font-black text-black mb-2">
                 Start Exploring Evidence
               </h2>
-              <p className="text-black font-medium mb-6">
+              <p className="text-[#777] text-[14px] mb-6 leading-relaxed">
                 Ask questions about customer pain points, feature priorities, retention risks, and more.
               </p>
               
@@ -76,7 +76,7 @@ export function ConversationArea({
                   <button
                     key={i}
                     onClick={() => onSendMessage(prompt)}
-                    className="p-3 text-left bg-[#FF90E8] hover:bg-[#FF90E8]/80 border-[3px] border-black rounded-xl font-bold transition-transform hover:-translate-y-1 hover:shadow-neo"
+                    className="p-3 text-left bg-[#FFE066] hover:-translate-y-0.5 border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-sm text-black font-bold transition-all"
                   >
                     {prompt}
                   </button>
@@ -98,9 +98,9 @@ export function ConversationArea({
 
             {/* Loading Indicator */}
             {isLoading && (
-              <div className="flex gap-2 items-center bg-white p-4 rounded-xl border-[3px] border-black max-w-[80%]">
+              <div className="flex gap-2 items-center bg-[#fff] p-4 rounded-[14px] border-[1.5px] border-[#e5e5e5] max-w-[80%]">
                 <TypingIndicator />
-                <span className="text-sm font-bold">
+                <span className="text-sm font-medium text-[#777]">
                   Analyzing customer evidence...
                 </span>
               </div>
@@ -114,30 +114,29 @@ export function ConversationArea({
       {/* Input Area */}
       <div className="border-t-[3px] border-black p-4 bg-white">
         <div className="flex gap-2">
-          <Input
+          <input
             ref={inputRef}
             value={inputValue}
             onChange={e => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Ask about customer pain points, features to build, retention risks..."
             disabled={isLoading}
-            className="flex-1 border-[3px] border-black rounded-xl font-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-black"
+            className="flex-1 px-4 h-[44px] bg-[#fff] border-[3px] border-black rounded-xl outline-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus:translate-y-[2px] transition-all text-sm font-bold placeholder:font-normal"
           />
-          <Button
+          <button
             onClick={handleSend}
             disabled={isLoading || !inputValue.trim()}
-            className="gap-2 border-[3px] border-black rounded-xl shadow-neo hover:-translate-y-1 hover:shadow-neo transition-transform bg-[#38DBFF] text-black font-black hover:bg-[#38DBFF]/80"
-            size="icon"
+            className="flex items-center justify-center w-[44px] h-[44px] bg-[#38DBFF] hover:-translate-y-0.5 text-black border-[3px] border-black rounded-xl shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all disabled:opacity-50"
           >
             {isLoading ? (
               <Loader className="h-5 w-5 animate-spin" />
             ) : (
               <Send className="h-5 w-5" />
             )}
-          </Button>
+          </button>
         </div>
 
-        <p className="text-xs font-bold text-black/60 mt-3 text-center">
+        <p className="text-xs text-[#777] mt-3 text-center">
           Powered by customer evidence. All responses backed by real quotes and sentiment analysis.
         </p>
       </div>

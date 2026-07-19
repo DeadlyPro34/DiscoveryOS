@@ -105,7 +105,11 @@ export function useExecutionHistory() {
     (limit = 50): WorkflowExecution[] => {
       return store
         .getRecentExecutions(limit)
-        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        .sort((a, b) => {
+          const timeA = new Date(a.createdAt || 0).getTime();
+          const timeB = new Date(b.createdAt || 0).getTime();
+          return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
+        });
     },
     [store],
   );

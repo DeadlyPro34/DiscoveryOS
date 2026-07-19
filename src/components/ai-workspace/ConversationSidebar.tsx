@@ -28,7 +28,11 @@ export function ConversationSidebar({
   const pinnedConversations = conversations.filter(c => c.isPinned);
   const recentConversations = conversations
     .filter(c => !c.isPinned)
-    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
+    .sort((a, b) => {
+      const timeA = new Date(a.updatedAt || 0).getTime();
+      const timeB = new Date(b.updatedAt || 0).getTime();
+      return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
+    });
 
   return (
     <div className="w-64 border-r border-slate-200 dark:border-slate-700 flex flex-col bg-white dark:bg-slate-950">

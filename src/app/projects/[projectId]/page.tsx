@@ -109,21 +109,24 @@ export default function ProjectDetailsPage() {
   };
 
   return (
-    <div className="space-y-6 pb-20">
-      <div className="flex items-center gap-4 mb-8">
-        <Button variant="outline" onClick={() => router.push('/projects')} className="gap-2">
+    <div className="pb-20">
+      <div className="pt-28 px-[28px] pb-[16px] flex items-center gap-4 border-b-[3px] border-black mb-8 bg-[#fff]">
+        <button 
+          onClick={() => router.push('/projects')} 
+          className="flex items-center justify-center h-[38px] px-3 bg-[#fff] border-[1.5px] border-[#d0d0d0] rounded-[8px] text-sm font-medium hover:bg-gray-50 transition-colors gap-2"
+        >
           <ArrowLeft className="w-4 h-4" /> Back
-        </Button>
+        </button>
         <div>
-          <h1 className="text-3xl font-bold">{project.name}</h1>
-          <p className="text-gray-600">{project.description}</p>
+          <h1 className="text-[22px] font-[700] text-[#111] leading-none">{project.name}</h1>
+          {project.description && <p className="text-[13px] text-[#777] mt-1">{project.description}</p>}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 px-[28px]">
+        <div className="lg:col-span-2 space-y-12">
           <section>
-            <h2 className="text-2xl font-bold mb-4">Upload Research Data</h2>
+            <h2 className="text-[22px] font-[700] text-[#111] mb-4">Upload Research Data</h2>
             <UploadArea 
               projectId={projectId} 
               onFilesSelected={handleFilesSelected}
@@ -131,7 +134,7 @@ export default function ProjectDetailsPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">Documents</h2>
+            <h2 className="text-[22px] font-[700] text-[#111] mb-4">Documents</h2>
             <DocumentList 
               documents={documents} 
               onRetry={(id) => console.log('Retry not implemented for uploaded files')}
@@ -141,19 +144,19 @@ export default function ProjectDetailsPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white border-[3px] border-black p-6 shadow-neo">
-            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Brain className="w-6 h-6" /> AI Status
+          <div className="bg-[#fff] border-[1.5px] border-[#e5e5e5] rounded-[14px] p-6">
+            <h3 className="text-[18px] font-[700] mb-4 flex items-center gap-2 text-[#111]">
+              <Brain className="w-6 h-6 text-[#111]" /> AI Status
             </h3>
-            <p className="text-gray-700 mb-6">
+            <p className="text-[#777] text-sm mb-6 leading-relaxed">
               When you upload files, our AI Agents will automatically parse the text, identify pain points, and generate insights.
             </p>
-            <Button 
-              className="w-full bg-accent hover:bg-[#ffe600] text-black border-[2px] border-black"
+            <button 
+              className="w-full flex justify-center items-center h-[38px] bg-[#111] hover:bg-black/80 text-[#fff] border-[1.5px] border-[#111] rounded-[8px] text-sm font-[600] transition-colors"
               onClick={() => router.push('/ai-workspace')}
             >
               Go to AI Workspace
-            </Button>
+            </button>
           </div>
         </div>
       </div>

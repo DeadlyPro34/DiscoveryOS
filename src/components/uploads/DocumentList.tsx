@@ -9,6 +9,7 @@ import { DocumentCard } from './DocumentCard';
 import { DocumentEmptyState } from './DocumentEmptyState';
 import {
   DropdownMenu,
+  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -80,22 +81,24 @@ export function DocumentList({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-[10px]">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <input
             placeholder="Search documents..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="w-full pl-9 h-[38px] bg-[#fff] border-[1.5px] border-[#d0d0d0] rounded-[8px] outline-none focus:border-[#111] focus:ring-0 transition-colors text-sm"
           />
         </div>
 
         <DropdownMenu>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Filter className="h-4 w-4" />
-            Status
-          </Button>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-2 h-[38px] bg-[#fff] border-[1.5px] border-[#d0d0d0] rounded-[8px] px-3 text-sm font-medium hover:bg-gray-50 transition-colors">
+              <Filter className="h-4 w-4" />
+              Status
+            </button>
+          </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>Filter by Status</DropdownMenuLabel>
             <DropdownMenuSeparator />
@@ -114,9 +117,11 @@ export function DocumentList({
         </DropdownMenu>
 
         <DropdownMenu>
-          <Button variant="outline" size="sm">
-            Sort: {sortBy === 'date' ? 'Date' : sortBy === 'size' ? 'Size' : 'Name'}
-          </Button>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center h-[38px] bg-[#fff] border-[1.5px] border-[#d0d0d0] rounded-[8px] px-3 text-sm font-medium hover:bg-gray-50 transition-colors">
+              Sort: {sortBy === 'date' ? 'Date' : sortBy === 'size' ? 'Size' : 'Name'}
+            </button>
+          </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Sort by</DropdownMenuLabel>
             <DropdownMenuSeparator />

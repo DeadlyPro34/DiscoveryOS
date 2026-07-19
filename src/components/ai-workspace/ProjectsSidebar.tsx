@@ -45,21 +45,24 @@ export function ProjectsSidebar({
   const pinnedConversations = conversations.filter(c => c.isPinned);
   const recentConversations = conversations
     .filter(c => !c.isPinned)
-    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime())
+    .sort((a, b) => {
+      const timeA = new Date(a.updatedAt || 0).getTime();
+      const timeB = new Date(b.updatedAt || 0).getTime();
+      return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
+    })
     .slice(0, 5);
 
   return (
-    <div className="w-64 border-r border-slate-200 dark:border-slate-700 flex flex-col bg-white dark:bg-slate-950 h-full overflow-hidden">
+    <div className="w-64 border-r-[1.5px] border-[#e5e5e5] flex flex-col bg-transparent h-full overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b border-slate-200 dark:border-slate-700">
-        <Button
+      <div className="p-4 border-b border-[#e5e5e5]">
+        <button
           onClick={() => onNewChat()}
-          className="w-full gap-2"
-          variant="default"
+          className="w-full flex items-center justify-center gap-2 h-[38px] bg-[#4DD9AC] text-black border-[3px] border-black rounded-xl px-4 text-sm font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] transition-all"
         >
           <Plus className="h-4 w-4" />
           New Chat
-        </Button>
+        </button>
       </div>
 
       {/* Scrollable Content */}

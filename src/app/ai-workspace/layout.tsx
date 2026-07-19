@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import AuthGuard from '@/components/AuthGuard';
 
 interface AIWorkspaceLayoutProps {
   children: ReactNode;
@@ -7,5 +8,9 @@ interface AIWorkspaceLayoutProps {
 export default function AIWorkspaceLayout({
   children,
 }: AIWorkspaceLayoutProps): React.ReactElement {
-  return <>{children}</>;
+  return (
+    <AuthGuard>
+      {children}
+    </AuthGuard>
+  );
 }

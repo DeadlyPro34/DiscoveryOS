@@ -53,10 +53,10 @@ export default function ProjectsPage(): React.ReactElement {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Projects</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+    <div>
+      <div className="pt-28 px-[28px] pb-[16px]">
+        <h1 className="text-[22px] font-[700] text-[#111] mb-1">Projects</h1>
+        <p className="text-[13px] text-[#777]">
           Workspace: <span className="font-semibold">{currentWorkspace.name}</span>
         </p>
       </div>

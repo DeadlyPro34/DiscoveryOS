@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import AuthGuard from '@/components/AuthGuard';
 
 export const metadata: Metadata = {
   title: 'DiscoveryOS - Projects',
@@ -10,5 +11,9 @@ export default function ProjectsLayout({
 }: {
   children: React.ReactNode;
 }): React.ReactElement {
-  return <>{children}</>;
+  return (
+    <AuthGuard>
+      {children}
+    </AuthGuard>
+  );
 }

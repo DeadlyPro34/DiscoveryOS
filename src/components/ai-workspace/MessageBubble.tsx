@@ -17,18 +17,18 @@ export function MessageBubble({ message, isUser }: MessageBubbleProps): React.Re
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
       <div
-        className={`max-w-[80%] px-4 py-3 rounded-xl border-[3px] border-black shadow-neo ${
+        className={`max-w-[80%] px-4 py-3 rounded-xl border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
           isUser
-            ? 'bg-[#FFDE59] text-black rounded-br-none'
-            : 'bg-white text-black rounded-bl-none'
+            ? 'bg-[#38DBFF] text-black rounded-br-sm'
+            : 'bg-white text-black rounded-bl-sm'
         }`}
       >
-        <div className="text-sm leading-relaxed whitespace-pre-wrap [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-4 [&>ol]:list-decimal [&>ol]:ml-4 [&>h3]:font-black [&>h3]:text-lg [&>h4]:font-black [&>h1]:font-black [&>h2]:font-black [&>pre]:bg-black [&>pre]:text-white [&>pre]:p-2 [&>pre]:rounded-md">
+        <div className="text-sm leading-relaxed whitespace-pre-wrap [&>p]:mb-2 [&>ul]:list-disc [&>ul]:ml-4 [&>ol]:list-decimal [&>ol]:ml-4 [&>h3]:font-black [&>h3]:text-lg [&>h4]:font-black [&>h1]:font-black [&>h2]:font-black [&>pre]:bg-black [&>pre]:text-white [&>pre]:p-3 [&>pre]:rounded-lg [&>pre]:border-[3px] [&>pre]:border-black">
           <ReactMarkdown>{message.content}</ReactMarkdown>
         </div>
         <p
-          className={`text-xs mt-1 ${
-            isUser ? 'text-blue-100' : 'text-slate-500 dark:text-slate-400'
+          className={`text-[11px] mt-1 ${
+            isUser ? 'text-[#777]' : 'text-gray-400'
           }`}
         >
           {formatDate(message.timestamp)}

@@ -37,25 +37,25 @@ export const ProjectListHeader: React.FC<ProjectListHeaderProps> = ({
   onCreateProject,
 }) => {
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="flex items-center gap-[10px] px-[28px] pb-[16px]">
       <div className="flex-1 flex gap-2">
         <div className="relative flex-1">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-          <Input
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+          <input
             placeholder="Search projects..."
             value={query}
             onChange={(e) => onQueryChange(e.target.value)}
-            className="pl-8"
+            className="w-full pl-9 h-[38px] bg-[#fff] border-[3px] border-black rounded-[8px] outline-none shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] focus:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] focus:translate-y-[2px] transition-all text-sm font-bold placeholder:font-normal"
           />
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex items-center gap-[10px]">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <button className="h-[38px] bg-[#fff] border-[3px] border-black rounded-[8px] px-3 text-sm font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] transition-all">
               Status {status && `(${status})`}
-            </Button>
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Filter by status</DropdownMenuLabel>
@@ -80,9 +80,9 @@ export const ProjectListHeader: React.FC<ProjectListHeaderProps> = ({
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm">
+            <button className="h-[38px] bg-[#fff] border-[3px] border-black rounded-[8px] px-3 text-sm font-bold shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] transition-all">
               Sort: {sortBy === 'date' ? 'Latest' : sortBy === 'name' ? 'Name' : sortBy === 'insights' ? 'Insights' : 'Uploads'}
-            </Button>
+            </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Sort by</DropdownMenuLabel>
@@ -102,30 +102,29 @@ export const ProjectListHeader: React.FC<ProjectListHeaderProps> = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="flex gap-1 border border-slate-200 rounded-md p-1 dark:border-slate-800">
-          <Button
-            variant={layoutType === 'grid' ? 'default' : 'ghost'}
-            size="sm"
+        <div className="flex items-center gap-1 border-[3px] border-black rounded-[8px] p-1 bg-[#fff] h-[38px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <button
             onClick={() => onLayoutChange('grid')}
-            className="h-7 w-7 p-0"
+            className={`h-7 w-7 p-0 flex items-center justify-center rounded-[4px] ${layoutType === 'grid' ? 'bg-[#FFE066] border-black border-2' : 'hover:bg-gray-100'}`}
           >
             <Grid3x3 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={layoutType === 'list' ? 'default' : 'ghost'}
-            size="sm"
+          </button>
+          <button
             onClick={() => onLayoutChange('list')}
-            className="h-7 w-7 p-0"
+            className={`h-7 w-7 p-0 flex items-center justify-center rounded-[4px] ${layoutType === 'list' ? 'bg-[#FFE066] border-black border-2' : 'hover:bg-gray-100'}`}
           >
             <List className="h-4 w-4" />
-          </Button>
+          </button>
         </div>
 
         {onCreateProject && (
-          <Button size="sm" onClick={onCreateProject} className="gap-2">
+          <button 
+            onClick={onCreateProject} 
+            className="h-[38px] bg-[#38DBFF] text-black border-[3px] border-black rounded-[8px] px-4 flex items-center gap-2 text-sm font-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] transition-all"
+          >
             <Plus className="h-4 w-4" />
             <span className="hidden sm:inline">New Project</span>
-          </Button>
+          </button>
         )}
       </div>
     </div>

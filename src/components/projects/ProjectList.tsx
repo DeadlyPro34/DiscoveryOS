@@ -39,7 +39,7 @@ export const ProjectList: React.FC<ProjectListProps> = ({
       {projects.map((project) => (
         <div
           key={project.id}
-          className="flex items-center gap-4 rounded-lg border border-slate-200 bg-white p-4 cursor-pointer transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-950"
+          className="flex items-center gap-4 rounded-xl border-[3px] border-black bg-white p-4 cursor-pointer transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px]"
           onClick={() => onSelectProject?.(project)}
         >
           <div className="flex-1 min-w-0">
