@@ -7,4 +7,6 @@ export interface Project {
   insightsCount: number;
   lastUpdated: Date;
   workspaceId: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
