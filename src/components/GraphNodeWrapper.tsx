@@ -8,7 +8,7 @@
 import React from 'react';
 import { Handle, Position } from 'react-flow-renderer';
 import {
-  Quote2,
+  Quote,
   AlertCircle,
   Layers,
   Users,
@@ -37,7 +37,7 @@ const getNodeIcon = (nodeType: NodeTypeEnum) => {
   const iconProps = { className: 'w-4 h-4' };
   switch (nodeType) {
     case 'customerQuote':
-      return <Quote2 {...iconProps} />;
+      return <Quote {...iconProps} />;
     case 'painPoint':
       return <AlertCircle {...iconProps} />;
     case 'theme':

@@ -2,19 +2,39 @@
  * Centralized export for all agent implementations.
  */
 
-export { CollectorAgent, collectorAgent } from './collectorAgent';
-export { InsightAgent, insightAgent } from './insightAgent';
-export { ThemeAgent, themeAgent } from './themeAgent';
-export { PersonaAgent, personaAgent } from './personaAgent';
-export { SentimentAgent, sentimentAgent } from './sentimentAgent';
-export { FrequencyAgent, frequencyAgent } from './frequencyAgent';
-export { ImpactAgent, impactAgent } from './impactAgent';
-export { OpportunityAgent, opportunityAgent } from './opportunityAgent';
+import { CollectorAgent, collectorAgent } from './collectorAgent';
+import { InsightAgent, insightAgent } from './insightAgent';
+import { ThemeAgent, themeAgent } from './themeAgent';
+import { PersonaAgent, personaAgent } from './personaAgent';
+import { SentimentAgent, sentimentAgent } from './sentimentAgent';
+import { FrequencyAgent, frequencyAgent } from './frequencyAgent';
+import { ImpactAgent, impactAgent } from './impactAgent';
+import { OpportunityAgent, opportunityAgent } from './opportunityAgent';
+import { PrioritizationAgent, prioritizationAgent } from './prioritizationAgent';
+import { PRDAgent, prdAgent } from './prdAgent';
+
 export {
+  CollectorAgent,
+  collectorAgent,
+  InsightAgent,
+  insightAgent,
+  ThemeAgent,
+  themeAgent,
+  PersonaAgent,
+  personaAgent,
+  SentimentAgent,
+  sentimentAgent,
+  FrequencyAgent,
+  frequencyAgent,
+  ImpactAgent,
+  impactAgent,
+  OpportunityAgent,
+  opportunityAgent,
   PrioritizationAgent,
   prioritizationAgent,
-} from './prioritizationAgent';
-export { PRDAgent, prdAgent } from './prdAgent';
+  PRDAgent,
+  prdAgent,
+};
 
 /**
  * Array of all agent instances for easy iteration.

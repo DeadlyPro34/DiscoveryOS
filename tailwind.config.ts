@@ -70,6 +70,7 @@ const config = {
         lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
         xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
         glass: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+        neo: '4px 4px 0px 0px rgba(0,0,0,1)',
       },
       backdropBlur: {
         xs: '2px',

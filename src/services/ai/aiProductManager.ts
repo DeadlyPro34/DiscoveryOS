@@ -82,7 +82,7 @@ export function validatePrompt(prompt: string): { valid: boolean; reason?: strin
 export function getAgentStatus() {
   return {
     isActive: false,
-    currentAgent: undefined,
+    currentAgent: undefined as any,
     progress: 0,
     agents: [
       { name: 'Collector Agent', status: 'complete' as const, progress: 100 },

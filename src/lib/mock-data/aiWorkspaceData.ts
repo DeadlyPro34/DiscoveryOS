@@ -364,7 +364,7 @@ export const mockFollowUpQuestions = [
   'What problems affect retention?',
   'Generate sprint recommendations',
   'Which integration would have the most impact?',
-  'What's blocking our top 10 customers?',
+  'What\'s blocking our top 10 customers?',
   'How should we improve support quality?',
   'What pricing changes would increase ARR?',
 ];

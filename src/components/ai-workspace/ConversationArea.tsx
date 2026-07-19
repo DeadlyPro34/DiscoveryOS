@@ -53,18 +53,35 @@ export function ConversationArea({
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-slate-950">
+    <div className="flex flex-col h-full bg-[#F4F4F0] border-x-[3px] border-black">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center text-center">
-            <div>
-              <p className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-2">
+            <div className="bg-white p-8 rounded-xl border-[3px] border-black shadow-neo max-w-md">
+              <h2 className="text-2xl font-black text-black mb-4">
                 Start Exploring Evidence
-              </p>
-              <p className="text-slate-600 dark:text-slate-400 max-w-xs">
+              </h2>
+              <p className="text-black font-medium mb-6">
                 Ask questions about customer pain points, feature priorities, retention risks, and more.
               </p>
+              
+              <div className="flex flex-col gap-3">
+                {[
+                  "What is our biggest customer pain point?",
+                  "Which feature should we build next?",
+                  "Generate a PRD for Dark Mode",
+                  "Summarize authentication issues"
+                ].map((prompt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => onSendMessage(prompt)}
+                    className="p-3 text-left bg-[#FF90E8] hover:bg-[#FF90E8]/80 border-[3px] border-black rounded-xl font-bold transition-transform hover:-translate-y-1 hover:shadow-neo"
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
@@ -74,39 +91,17 @@ export function ConversationArea({
                 {message.role === 'user' ? (
                   <MessageBubble message={message} isUser />
                 ) : (
-                  <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-                    <AIResponse response={message.content as any} isLoading={isLoading} />
-                  </div>
+                  <MessageBubble message={message} isUser={false} />
                 )}
               </div>
             ))}
 
-            {/* Streaming Response */}
-            {streamingResponse && (
-              <div className="bg-slate-50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
-                {streamingResponse.response ? (
-                  <AIResponse
-                    response={streamingResponse.response}
-                    streamingText={streamingResponse.text}
-                    isLoading={isLoading}
-                  />
-                ) : (
-                  <div className="flex gap-2 items-center">
-                    <TypingIndicator />
-                    <span className="text-sm text-slate-600 dark:text-slate-400">
-                      Analyzing customer evidence...
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* Loading Indicator */}
-            {isLoading && !streamingResponse && (
-              <div className="flex gap-2 items-center">
+            {isLoading && (
+              <div className="flex gap-2 items-center bg-white p-4 rounded-xl border-[3px] border-black max-w-[80%]">
                 <TypingIndicator />
-                <span className="text-sm text-slate-600 dark:text-slate-400">
-                  Generating response...
+                <span className="text-sm font-bold">
+                  Analyzing customer evidence...
                 </span>
               </div>
             )}
@@ -117,7 +112,7 @@ export function ConversationArea({
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-slate-200 dark:border-slate-700 p-4 bg-white dark:bg-slate-950">
+      <div className="border-t-[3px] border-black p-4 bg-white">
         <div className="flex gap-2">
           <Input
             ref={inputRef}
@@ -126,23 +121,23 @@ export function ConversationArea({
             onKeyDown={handleKeyDown}
             placeholder="Ask about customer pain points, features to build, retention risks..."
             disabled={isLoading}
-            className="flex-1"
+            className="flex-1 border-[3px] border-black rounded-xl font-medium focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-black"
           />
           <Button
             onClick={handleSend}
             disabled={isLoading || !inputValue.trim()}
-            className="gap-2"
+            className="gap-2 border-[3px] border-black rounded-xl shadow-neo hover:-translate-y-1 hover:shadow-neo transition-transform bg-[#38DBFF] text-black font-black hover:bg-[#38DBFF]/80"
             size="icon"
           >
             {isLoading ? (
-              <Loader className="h-4 w-4 animate-spin" />
+              <Loader className="h-5 w-5 animate-spin" />
             ) : (
-              <Send className="h-4 w-4" />
+              <Send className="h-5 w-5" />
             )}
           </Button>
         </div>
 
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+        <p className="text-xs font-bold text-black/60 mt-3 text-center">
           Powered by customer evidence. All responses backed by real quotes and sentiment analysis.
         </p>
       </div>

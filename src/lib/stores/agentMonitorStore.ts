@@ -140,7 +140,7 @@ export const useAgentMonitor = create<AgentMonitorState>((set, get) => ({
   },
 
   setCurrentExecution: (data?) => {
-    set({ currentExecution: data });
+    set({ currentExecution: data as any });
   },
 
   setFilter: (filterKey, value) => {

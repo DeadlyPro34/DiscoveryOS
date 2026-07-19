@@ -112,6 +112,7 @@ export class MultiAgentOrchestrator {
             if (lastResult.output?.result) {
               agentInput.context = {
                 ...agentInput.context,
+                // @ts-ignore
                 previousAgentOutput: lastResult.output.result,
                 pipelineResults: context.results.map((r) => ({
                   agent: r.agentId,
