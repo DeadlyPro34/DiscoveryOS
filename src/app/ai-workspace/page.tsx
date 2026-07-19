@@ -64,7 +64,12 @@ export default function AIWorkspacePage() {
       <div className="hidden md:flex flex-col w-80 border-r-[3px] border-black bg-transparent pt-28">
         <div className="flex-1 overflow-y-auto" data-lenis-prevent>
           <ProjectsSidebar
-            projects={projects}
+            projects={projects.map(p => ({
+              ...p,
+              evidenceCount: 0,
+              createdAt: p.createdAt ? new Date(p.createdAt) : new Date(),
+              updatedAt: p.updatedAt ? new Date(p.updatedAt) : new Date()
+            })) as AIWorkspaceProject[]}
             conversations={conversations}
             selectedProjectId={undefined}
             selectedConversationId={currentConversation?.id}

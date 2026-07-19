@@ -17,7 +17,7 @@ interface AIContextStore {
 export const useAIContextStore = create<AIContextStore>()(
   persist(
     (set) => ({
-      contextChunks: [],
+      contextChunks: [] as LocalContextChunk[],
       addContext: (chunks) =>
         set((state) => ({
           contextChunks: [...state.contextChunks, ...chunks],
