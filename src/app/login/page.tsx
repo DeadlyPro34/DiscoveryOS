@@ -16,14 +16,19 @@ export default function LoginPage() {
   const [name, setName] = useState('John Doe');
   const { login } = useAuthStore();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate auth delay
-    setTimeout(() => {
-      login(isSignUp ? name : 'Demo User'); // Pass name on sign up
+    setError(null);
+    try {
+      await login(isSignUp ? name : 'Demo User');
       router.push('/projects');
-    }, 1500);
+    } catch (err) {
+      setError('Login failed. Please check your database connection.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -38,6 +43,11 @@ export default function LoginPage() {
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
+            {error && (
+              <div className="bg-red-100 border-[3px] border-red-500 text-red-700 p-3 font-bold text-sm">
+                {error}
+              </div>
+            )}
             {isSignUp && (
               <div className="space-y-2">
                 <label className="text-sm font-bold uppercase tracking-wider">Name</label>
