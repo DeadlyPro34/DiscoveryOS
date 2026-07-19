@@ -75,8 +75,32 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    background-image: radial-gradient(circle, #000 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-color: hsl(160, 50%, 90%); /* Light mint green */
+    background-color: #f0faf5;
   }
+}
+
+/* Custom Scrollbar for Neo-Brutalist Theme */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0faf5;
+  border-left: 3px solid black;
+  border-top: 3px solid black;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFE066;
+  border: 3px solid black;
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4DD9AC;
+}
+
+::-webkit-scrollbar-corner {
+  background: #f0faf5;
 }
