@@ -3,6 +3,7 @@
  */
 
 import { CollectorAgent, collectorAgent } from './collectorAgent';
+import { CleaningAgent, cleaningAgent } from './cleaningAgent';
 import { InsightAgent, insightAgent } from './insightAgent';
 import { ThemeAgent, themeAgent } from './themeAgent';
 import { PersonaAgent, personaAgent } from './personaAgent';
@@ -16,6 +17,8 @@ import { PRDAgent, prdAgent } from './prdAgent';
 export {
   CollectorAgent,
   collectorAgent,
+  CleaningAgent,
+  cleaningAgent,
   InsightAgent,
   insightAgent,
   ThemeAgent,
@@ -41,6 +44,7 @@ export {
  */
 export const allAgents = [
   collectorAgent,
+  cleaningAgent,
   insightAgent,
   themeAgent,
   personaAgent,

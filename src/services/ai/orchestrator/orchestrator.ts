@@ -1,11 +1,12 @@
 /**
- * Multi-Agent Orchestrator for DiscoveryOS.
- * Executes the 10-agent pipeline sequentially.
+ * Multi-Agent Orchestrator for DiscoveryOS V2.
+ * Executes the pipeline in parallel stages based on a DAG structure.
  * Manages state, error handling, and monitoring.
  */
 
 import { AgentInput, AgentExecutionResult } from '@/types/ai/agent';
 import { agentRegistry } from '../agents';
+import { SupabaseService } from '../database/supabaseClient';
 
 /**
  * Workflow pipeline configuration.
@@ -13,7 +14,7 @@ import { agentRegistry } from '../agents';
 export interface PipelineConfig {
   name: string;
   description: string;
-  agents: string[]; // Agent IDs in execution order
+  stages: string[][]; // Agent IDs grouped by parallel execution stages
   passOutputToNext: boolean; // Whether to pass previous output as context
 }
 
@@ -31,28 +32,38 @@ export interface PipelineContext {
 }
 
 /**
- * Standard 10-agent pipeline configuration.
+ * Standard V2 Analysis Pipeline.
+ * Stops before PRD generation to allow for Human Review.
  */
 export const STANDARD_PIPELINE_CONFIG: PipelineConfig = {
-  name: 'Multi-Agent Intelligence Pipeline',
-  description: 'Sequential execution of 10 specialized agents for comprehensive research analysis',
-  agents: [
-    'collector-agent',
-    'insight-agent',
-    'theme-agent',
-    'persona-agent',
-    'sentiment-agent',
-    'frequency-agent',
-    'impact-agent',
-    'opportunity-agent',
-    'prioritization-agent',
-    'prd-agent',
+  name: 'Multi-Agent Intelligence Pipeline (V2)',
+  description: 'Parallel execution of specialized agents for comprehensive research analysis',
+  stages: [
+    ['collector-agent'],
+    ['cleaning-agent'],
+    ['insight-agent', 'theme-agent', 'persona-agent', 'sentiment-agent', 'frequency-agent'],
+    ['impact-agent'],
+    ['opportunity-agent'],
+    ['prioritization-agent'],
   ],
   passOutputToNext: true,
 };
 
 /**
- * Multi-Agent Orchestrator: Executes the 10-agent pipeline.
+ * Generation Pipeline.
+ * Executes after Human Review to generate final artifacts.
+ */
+export const GENERATION_PIPELINE_CONFIG: PipelineConfig = {
+  name: 'Multi-Agent Generation Pipeline',
+  description: 'Generates PRDs and Roadmaps after human review',
+  stages: [
+    ['prd-agent']
+  ],
+  passOutputToNext: true,
+};
+
+/**
+ * Multi-Agent Orchestrator: Executes the pipeline in stages.
  */
 export class MultiAgentOrchestrator {
   private pipelineConfig: PipelineConfig;
@@ -68,7 +79,7 @@ export class MultiAgentOrchestrator {
 
   /**
    * Execute the complete pipeline.
-   * Runs agents sequentially, passing output to next agent as context.
+   * Runs stages sequentially, but agents within a stage in parallel.
    */
   async executePipeline(
     input: AgentInput,
@@ -87,74 +98,84 @@ export class MultiAgentOrchestrator {
     const startTime = Date.now();
 
     try {
-      // Execute agents sequentially
       let currentInput: AgentInput = input;
+      let previousStageResults: AgentExecutionResult[] = [];
 
-      for (const agentId of this.pipelineConfig.agents) {
-        try {
-          const agent = agentRegistry.getAgent(agentId);
-          if (!agent) {
-            throw new Error(`Agent not found: ${agentId}`);
-          }
-
-          // Create input for this agent
-          const agentInput: AgentInput = {
-            ...currentInput,
-            requestId: `${pipelineId}-${agentId}-${Date.now()}`,
-          };
-
-          // If passing output to next, add previous results to context
-          if (
-            this.pipelineConfig.passOutputToNext &&
-            context.results.length > 0
-          ) {
-            const lastResult = context.results[context.results.length - 1];
-            if (lastResult.output?.result) {
-              agentInput.context = {
-                ...agentInput.context,
-                // @ts-ignore
-                previousAgentOutput: lastResult.output.result,
-                pipelineResults: context.results.map((r) => ({
-                  agent: r.agentId,
-                  status: r.status,
-                  confidence: r.confidenceScore,
-                })),
-              };
+      for (const stage of this.pipelineConfig.stages) {
+        const stagePromises = stage.map(async (agentId) => {
+          try {
+            const agent = agentRegistry.getAgent(agentId);
+            if (!agent) {
+              throw new Error(`Agent not found: ${agentId}`);
             }
-          }
 
-          // Execute agent
-          const result = await agent.execute(agentInput);
-          context.results.push(result);
-
-          // Update current input for next agent
-          if (this.pipelineConfig.passOutputToNext && result.output?.result) {
-            currentInput = {
+            const agentInput: AgentInput = {
               ...currentInput,
-              content:
-                typeof result.output.result === 'string'
-                  ? result.output.result
-                  : JSON.stringify(result.output.result),
+              requestId: `${pipelineId}-${agentId}-${Date.now()}`,
             };
+
+            // If passing output to next, add previous stage results to context
+            if (this.pipelineConfig.passOutputToNext && previousStageResults.length > 0) {
+              const previousOutputs = previousStageResults
+                .map(r => r.output?.result)
+                .filter(Boolean);
+              
+              if (previousOutputs.length > 0) {
+                agentInput.context = {
+                  ...agentInput.context,
+                  // @ts-ignore
+                  previousStageOutputs: previousOutputs,
+                  pipelineResults: context.results.map((r) => ({
+                    agent: r.agentId,
+                    status: r.status,
+                    confidence: r.confidenceScore,
+                  })),
+                };
+              }
+            }
+
+            const result = await agent.execute(agentInput);
+            
+            // Persist output to database based on agent type
+            await this.persistAgentOutput(agentId, result, currentInput.metadata);
+
+            console.log(
+              `✓ ${agent.name} completed (confidence: ${(result.confidenceScore * 100).toFixed(1)}%, time: ${result.executionTimeMs}ms)`,
+            );
+            return result;
+          } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            context.errors.push({
+              agentId,
+              error: errorMessage,
+              timestamp: new Date(),
+            });
+
+            console.error(`✗ Agent ${agentId} failed:`, errorMessage);
+            return null; // Return null on failure so Promise.all doesn't reject
           }
+        });
 
-          // Log agent completion
-          console.log(
-            `✓ ${agent.name} completed (confidence: ${(result.confidenceScore * 100).toFixed(1)}%, time: ${result.executionTimeMs}ms)`,
-          );
-        } catch (error) {
-          const errorMessage =
-            error instanceof Error ? error.message : String(error);
-          context.errors.push({
-            agentId,
-            error: errorMessage,
-            timestamp: new Date(),
-          });
-
-          console.error(`✗ Agent ${agentId} failed:`, errorMessage);
-
-          // Continue with next agent instead of failing entire pipeline
-          // This allows partial results even if one agent fails
+        // Execute all agents in the current stage in parallel
+        const results = await Promise.all(stagePromises);
+        
+        // Filter out failures and add to context
+        const successfulResults = results.filter((r): r is AgentExecutionResult => r !== null);
+        context.results.push(...successfulResults);
+        
+        // Prepare input for the next stage
+        previousStageResults = successfulResults;
+        
+        if (this.pipelineConfig.passOutputToNext && previousStageResults.length > 0) {
+          // Merge all structured outputs from the stage into the currentInput content
+          const mergedOutputs = previousStageResults
+            .map(r => typeof r.output?.result === 'string' ? r.output.result : JSON.stringify(r.output?.result))
+            .join('\n\n--- [Merged Stage Context] ---\n\n');
+            
+          currentInput = {
+            ...currentInput,
+            content: mergedOutputs || currentInput.content, // Fallback to previous if empty
+          };
         }
       }
     } finally {
@@ -167,8 +188,93 @@ export class MultiAgentOrchestrator {
   }
 
   /**
+   * Persists agent outputs to Supabase DB based on agent type
+   */
+  private async persistAgentOutput(agentId: string, result: AgentExecutionResult, metadata?: Record<string, unknown>) {
+    if (!metadata?.projectId || !metadata?.workspaceId) return;
+    
+    try {
+      // @ts-ignore - SupabaseService will safely fail if not initialized
+      const db = SupabaseService.getInstance();
+      const output = result.output?.structured || result.output?.result;
+      if (!output) return;
+
+      const baseRecord = {
+        project_id: metadata.projectId as string,
+        workspace_id: metadata.workspaceId as string,
+      };
+
+      switch (agentId) {
+        case 'theme-agent':
+          // @ts-ignore
+          if (Array.isArray(output.themes)) {
+            // @ts-ignore
+            for (const theme of output.themes) {
+              await db.saveTheme({ ...baseRecord, name: theme, description: 'Discovered theme' });
+            }
+          }
+          break;
+        case 'persona-agent':
+          // @ts-ignore
+          if (Array.isArray(output.personas)) {
+            // @ts-ignore
+            for (const persona of output.personas) {
+              await db.savePersona({ ...baseRecord, role: persona, description: 'Discovered persona' });
+            }
+          }
+          break;
+        case 'insight-agent':
+          await db.saveInsight({
+            ...baseRecord,
+            type: 'pain_point',
+            // @ts-ignore
+            title: typeof output === 'string' ? output.substring(0, 50) : 'Discovered Insight',
+            description: typeof output === 'string' ? output : JSON.stringify(output),
+            confidence_score: result.confidenceScore
+          });
+          break;
+        case 'sentiment-agent':
+          // @ts-ignore
+          if (output.sentiment) {
+            // @ts-ignore
+            await db.saveInsight({ ...baseRecord, type: 'sentiment', title: output.sentiment, description: JSON.stringify(output) });
+          }
+          break;
+        case 'prd-agent':
+          await db.saveArtifact({
+            ...baseRecord,
+            type: 'prd',
+            title: 'Generated PRD',
+            content: typeof output === 'string' ? output : JSON.stringify(output),
+            status: 'draft'
+          });
+          break;
+      }
+    } catch (err) {
+      console.warn(`[Orchestrator] Persistence failed for ${agentId}. (Is Supabase connected?)`);
+    }
+  }
+
+  /**
+   * Execute generation phase (e.g., PRD, Roadmap) specifically for V2 workflow.
+   */
+  async executeGenerationPhase(
+    reviewedInput: AgentInput,
+    workflowId: string,
+  ): Promise<PipelineContext> {
+    const originalConfig = this.pipelineConfig;
+    this.pipelineConfig = GENERATION_PIPELINE_CONFIG;
+    
+    try {
+      return await this.executePipeline(reviewedInput, workflowId);
+    } finally {
+      this.pipelineConfig = originalConfig;
+    }
+  }
+
+  /**
    * Execute pipeline with error recovery.
-   * Retries failed agents up to maxRetries.
+   * Retries failed stages up to maxRetries.
    */
   async executePipelineWithRetry(
     input: AgentInput,
@@ -176,23 +282,19 @@ export class MultiAgentOrchestrator {
     maxRetries: number = 1,
   ): Promise<PipelineContext> {
     let lastContext: PipelineContext | null = null;
+    const totalAgents = this.pipelineConfig.stages.flat().length;
 
     for (let attempt = 0; attempt <= maxRetries; attempt++) {
       try {
         lastContext = await this.executePipeline(input, workflowId);
 
-        // If successful (no errors or all agents completed), return
         if (lastContext.errors.length === 0) {
           return lastContext;
         }
 
-        // If we have results from most agents, consider it a success
-        const agentCount = this.pipelineConfig.agents.length;
-        if (
-          lastContext.results.length / agentCount >= 0.8
-        ) {
+        if (lastContext.results.length / totalAgents >= 0.8) {
           console.warn(
-            `Pipeline partially successful (${lastContext.results.length}/${agentCount} agents)`,
+            `Pipeline partially successful (${lastContext.results.length}/${totalAgents} agents)`,
           );
           return lastContext;
         }
@@ -201,10 +303,7 @@ export class MultiAgentOrchestrator {
           console.log(`Pipeline execution attempt ${attempt + 1} failed, retrying...`);
         }
       } catch (error) {
-        console.error(
-          `Pipeline execution attempt ${attempt + 1} error:`,
-          error,
-        );
+        console.error(`Pipeline execution attempt ${attempt + 1} error:`, error);
       }
     }
 
@@ -214,48 +313,27 @@ export class MultiAgentOrchestrator {
         workflowId,
         startedAt: new Date(),
         results: [],
-        errors: [
-          {
-            agentId: 'orchestrator',
-            error: 'Pipeline execution failed after retries',
-            timestamp: new Date(),
-          },
-        ],
+        errors: [{ agentId: 'orchestrator', error: 'Pipeline execution failed', timestamp: new Date() }],
         totalExecutionTime: 0,
       }
     );
   }
 
-  /**
-   * Get pipeline configuration.
-   */
   getPipelineConfig(): PipelineConfig {
     return this.pipelineConfig;
   }
 
-  /**
-   * Get list of agents in pipeline.
-   */
   getPipelineAgents(): string[] {
-    return this.pipelineConfig.agents;
+    return this.pipelineConfig.stages.flat();
   }
 
-  /**
-   * Update pipeline configuration.
-   */
   updatePipelineConfig(config: PipelineConfig): void {
     this.pipelineConfig = config;
   }
 }
 
-/**
- * Export singleton orchestrator with standard pipeline.
- */
 export const multiAgentOrchestrator = new MultiAgentOrchestrator();
 
-/**
- * Utility to create orchestrator with custom pipeline.
- */
 export function createOrchestrator(
   config?: PipelineConfig,
 ): MultiAgentOrchestrator {
