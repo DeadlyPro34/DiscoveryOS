@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Brain, Zap, Target, BarChart3, MessageSquare } from 'lucide-react';
-import { AnimatedCharacter } from '@/components/ui/AnimatedCharacter';
 
 export default function LandingPage(): React.ReactElement {
   return (
