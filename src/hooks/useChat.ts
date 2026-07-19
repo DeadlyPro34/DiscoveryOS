@@ -46,22 +46,26 @@ export function useChat(projectId?: string) {
     setIsStreaming(true);
 
     try {
-      // Build conversation history for the API (all previous messages, excluding the new ones)
-      const conversationHistory = messages.map(m => ({
-        role: m.role,
-        content: m.content,
-      }));
+      // Build conversation history for the API
+      // OPTIMIZATION: Only send last 3 messages to stay within Groq free tier (12,000 TPM)
+      const conversationHistory = messages
+        .slice(-3)  // Limit to last 3 messages
+        .map(m => ({
+          role: m.role,
+          content: m.content.substring(0, 500), // Limit content to 500 chars per message
+        }));
 
       // Only send context chunks that match this project (or all if none selected)
+      // OPTIMIZATION: Limit to top 3 chunks to reduce token count
       const relevantChunks = projectId 
-        ? contextChunks.filter(c => c.metadata.projectId === projectId)
-        : contextChunks;
+        ? contextChunks.filter(c => c.metadata.projectId === projectId).slice(0, 3)
+        : contextChunks.slice(0, 3);
 
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: content,
+          message: content.substring(0, 1000), // Limit user message to 1000 chars
           conversationHistory,
           projectId,
           localContext: relevantChunks,

@@ -42,7 +42,15 @@ export async function POST(req: NextRequest) {
     const llmProvider = new GroqProvider(groqApiKey);
     const contextBuilder = new ContextBuilder();
 
+    // Limit conversation history to last 3 messages to reduce token count
+    // This prevents hitting the 12,000 TPM limit on free tier
+    const limitedHistory = conversationHistory.slice(-3).map((msg) => ({
+      role: msg.role,
+      content: msg.content.substring(0, 500), // Truncate each message to 500 chars
+    }));
+
     // Try to retrieve context from RAG if Supabase is configured
+    // Limit to top 3 chunks and truncate each to 300 chars to save tokens
     let chunks: Array<{ id: string; content: string; metadata: Record<string, unknown>; similarity: number }> = [];
     
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -61,32 +69,33 @@ export async function POST(req: NextRequest) {
     // Fallback to in-memory context from the frontend if RAG is unavailable or returned no chunks
     if (chunks.length === 0 && localContext.length > 0) {
       console.log(`Using ${localContext.length} in-memory context chunks from frontend`);
-      chunks = localContext.slice(-5); // Use the 5 most recent agent insight chunks
+      // Limit to top 3 chunks and truncate to save tokens
+      chunks = localContext.slice(-3).map((chunk) => ({
+        ...chunk,
+        content: chunk.content.substring(0, 300), // Truncate to 300 chars
+      }));
     }
 
-    // Build context
+    // Build context with token-optimized approach
     const contextString = contextBuilder.buildContext(
       message,
-      chunks,
-      conversationHistory,
+      chunks.slice(0, 3), // Limit to 3 chunks max
+      limitedHistory,
       projectId || 'DiscoveryOS',
     );
 
-    const systemPrompt = `You are DiscoveryOS AI — an expert AI Product Manager.
-You help product teams understand their customer research data and make evidence-backed product decisions.
+    const systemPrompt = `You are DiscoveryOS AI - an expert Product Manager AI.
+Help teams understand customer research and make data-backed product decisions.
 
 RULES:
-- If context chunks are provided, cite them using [1], [2], etc. notation
-- Structure your responses with clear headings and bullet points
-- Always provide actionable recommendations
-- Be concise but comprehensive
-- When generating PRDs, use proper markdown formatting
-- When asked about pain points, prioritize by frequency and business impact
-- If no context is available, clearly state that no customer data has been uploaded yet and suggest the user upload research documents first`;
+- Cite context chunks using [1], [2], etc.
+- Be concise: use bullet points and headings
+- Provide actionable recommendations
+- Use markdown for PRDs
+- Prioritize issues by frequency and impact
+- If no context: suggest uploading research documents`;
 
-    const userPrompt = `Based on the following context, answer the user's question.
-
-${contextString}`;
+    const userPrompt = `${contextString}\n\nUser question: ${message}`;
 
     // Stream the response
     const stream = llmProvider.generateStream(systemPrompt, userPrompt);
